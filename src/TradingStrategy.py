@@ -6,7 +6,7 @@ SECRET_KEY="" # Put in yours here - Needed for paper trading
 
 class TradingStrategy:
     def __init__(self,STOCK):
-        # self.api = alpaca.REST(API_KEY_ID, SECRET_KEY, ENDPOINT)
+        self.api = alpaca.REST(API_KEY_ID, SECRET_KEY, ENDPOINT)
         self.STOCK = STOCK
         self.SELL_LIMIT_FACTOR = 1.01 # 1 percent margin
         
@@ -14,7 +14,7 @@ class TradingStrategy:
         # call during initialization of class - Feel free to add
         
         # Get past 90 days closing prices
-        #self.get_past90_closing_prices()
+        self.get_past90_closing_prices()
     def try_me(self):
         print("IT works") 
     

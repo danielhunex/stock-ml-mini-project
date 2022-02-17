@@ -27,11 +27,13 @@ class ApiClient:
         df.to_csv(filepath)
 
     def read_csv(self, filepath):
-            df = pd.read_csv(filepath=filepath)
+            print("reading from file")
+            print(filepath)
+            df = pd.read_csv(filepath)
             df.time = pd.to_datetime(df.time)   # converting the time column to DatetimeIndex
             df.set_index('time',inplace=True)    
             return df   
     def get_path(self, stock_ticker):        
       dirname = os.path.dirname(__file__)
-      filepath = os.path.join(dirname, f'{BASE_DIR}/{stock_ticker}.csv')
+      filepath = os.path.join(dirname, f'{BASE_DIR}\{stock_ticker}.csv')
       return filepath

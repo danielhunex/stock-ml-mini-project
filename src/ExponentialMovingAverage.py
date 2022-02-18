@@ -1,11 +1,14 @@
 from signal import signal
 import pandas as pd
 import numpy as np
+from BaseStrategy import BaseStrategy
 from MovingAverage import MovingAverage
 
-class ExponentialMovingAverage:
-    def __init__(self, df):
-        self.dataFrame =df
+class ExponentialMovingAverage(BaseStrategy):
+    def __init__(self, df, ticker):
+        BaseStrategy.__init__(self)
+        self.TICKER = ticker
+        self.dataFrame = df
         self.movingAverage = MovingAverage(df)
 
     def __generate_signal_position(self, long_period, short_period):
@@ -27,6 +30,8 @@ class ExponentialMovingAverage:
          # generate the long exponential moving average
          self.movingAverage.EMA(period=long_period,column=column)
          self.__generate_signal_position(long_period=long_period, short_period=short_period)
+
+         self._plot(self.TICKER, df=self.dataFrame, short_period=short_period,long_period=long_period,mv_type="EMA")
          return self.dataFrame
 
   

@@ -27,8 +27,6 @@ class ApiClient:
         df.to_csv(filepath)
 
     def read_csv(self, filepath):
-            print("reading from file")
-            print(filepath)
             df = pd.read_csv(filepath)
             df.time = pd.to_datetime(df.time)   # converting the time column to DatetimeIndex
             df.set_index('time',inplace=True)    

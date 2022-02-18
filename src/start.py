@@ -2,8 +2,8 @@ from TradingStrategy import TradingStrategy
 from ApiClient import ApiClient
 from ExponentialMovingAverage import ExponentialMovingAverage
 
-Api_Key =''
-Secret_Key=''
+Api_Key ='PKCD2BLDAVHBPC7ZFJV1'
+Secret_Key='yMk526TDcjYyjGDQrxy2COdUKy0vgiW2efL6mftd'
 endpoint='https://paper-api.alpaca.markets'
 
 ts = ApiClient(api_key_Id=Api_Key,api_key_secret=Secret_Key)

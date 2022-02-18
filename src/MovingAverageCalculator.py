@@ -1,6 +1,6 @@
 import pandas as pd
 
-class MovingAverage:
+class MovingAverageCalculator:
     def __init__(self,df):
         self.DataFrame = df
     def SMA(self, period=20, column='close'):

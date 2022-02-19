@@ -69,7 +69,7 @@ class StlSlope():
         buy = self.df.close[self.position == 1.0]
         for i in range(sell.shape[0]):
             temp=temp/buy[i]*sell[i]
-        print("get: $",temp-principal,"\nThat's ",temp/principal,"%")
+        print("get: $",temp-principal,"\nThat's ",temp/principal*100,"%")
         self._plot()
         
     def  _plot (self):

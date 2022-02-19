@@ -6,6 +6,13 @@ class BaseStrategy:
     def __init__(self, df, mv_type):
         self.df = df
         self.mvType = mv_type
+    
+    # calculates profit for the specific algorithm
+    def calculate_profit (self, short_period):
+          temp = pd.DataFrame(index=self.df.index)  
+          temp["profit"] =0.0            
+          temp['profit'][20:]  = np.where(self.df["positions"][20:]== -1, self.df["close"][short_period:], 0.0) - np.where(self.df["positions"][short_period:]== 1,  self.df["close"][20:], 0.0) 
+          return temp["profit"].sum()
 
     #function to generate buy and sell signals
     def _generate_signal_position(self, long_period, short_period):

@@ -3,13 +3,13 @@ from signal import signal
 import pandas as pd
 import numpy as np
 from BaseStrategy import BaseStrategy
-from MovingAverage import MovingAverage
+from MovingAverageCalculator import MovingAverageCalculator
 
 class SimpleMovingAverage(BaseStrategy):
     def __init__(self, df, ticker):
         BaseStrategy.__init__(self, df, "SMA")
         self.TICKER = ticker
-        self.movingAverage = MovingAverage(df)
+        self.movingAverage = MovingAverageCalculator(df)
 
 
     def create_trading_strategy(self, long_period=50, short_period=20, column='close'):

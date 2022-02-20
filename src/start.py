@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 import TradingStrategy as ts
 import ApiClient as ac
-import ExponentialMovingAverage as ema
+import ExponentialMovingAverageStrategy as ema
 import SimpleMovingAverageStrategy as sma
 
 importlib.reload(ts)
@@ -26,7 +26,7 @@ client = ac.ApiClient(api_key_Id=Api_Key,api_key_secret=Secret_Key)
 for ticker in ["FB","MSFT","NFLX","AMD","GOOG"]:
   df= client. get_closing_price(ticker,365)
 
-  ema_instance = ema.ExponentialMovingAverage(df=df,ticker=ticker) # you can replace this with SimpleMovingAverage
+  ema_instance = ema.ExponentialMovingAverageStrategy(df=df,ticker=ticker) # you can replace this with SimpleMovingAverage
 
   #print(df.head(10))
   df= ema_instance.create_trading_strategy(long_period=50,short_period=20,column='close') 

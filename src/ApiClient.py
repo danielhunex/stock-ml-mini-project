@@ -30,7 +30,7 @@ class ApiClient:
             df = pd.read_csv(filepath)
             df.time = pd.to_datetime(df.time)   # converting the time column to DatetimeIndex
             df.set_index('time',inplace=True)
-            df.index.name = ['time']
+            #df.index.name = ['time']
             return df   
     def get_path(self, stock_ticker):        
       dirname = os.path.dirname(__file__)

@@ -4,7 +4,7 @@ import numpy as np
 from BaseStrategy import BaseStrategy
 from MovingAverageCalculator import MovingAverageCalculator
 
-class ExponentialMovingAverage(BaseStrategy):
+class ExponentialMovingAverageStrategy(BaseStrategy):
     def __init__(self, df, ticker):
         BaseStrategy.__init__(self,df,"EMA")
         self.TICKER = ticker

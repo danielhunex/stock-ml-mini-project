@@ -5,7 +5,7 @@ import numpy as np
 from BaseStrategy import BaseStrategy
 from MovingAverageCalculator import MovingAverageCalculator
 
-class SimpleMovingAverage(BaseStrategy):
+class SimpleMovingAverageStrategy(BaseStrategy):
     def __init__(self, df, ticker):
         BaseStrategy.__init__(self, df, "SMA")
         self.TICKER = ticker

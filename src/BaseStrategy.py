@@ -8,11 +8,16 @@ class BaseStrategy:
         self.mvType = mv_type
     
     # calculates profit for the specific algorithm
-    def calculate_profit (self, short_period):
-          temp = pd.DataFrame(index=self.df.index)  
-          temp["profit"] =0.0            
-          temp['profit'][20:]  = np.where(self.df["positions"][20:]== -1, self.df["close"][short_period:], 0.0) - np.where(self.df["positions"][short_period:]== 1,  self.df["close"][20:], 0.0) 
-          return temp["profit"].sum()
+    def calculate_profit (self):
+          #daily profit      
+          self.df["daily_profit"] =  np.log(self.df['close'] / self.df['close'].shift(1)).round(3)
+
+          #calculate strategy profit
+          self.df['strategy_profit'] = self.df['signal'].shift(1) * self.df['daily_profit']  # each signal =1 is our strategy buy or hold if we bought previously
+          # We need to get rid of the NaN generated in the first row:
+          self.df.dropna(inplace=True)
+
+          return self.df
 
     #function to generate buy and sell signals
     def _generate_signal_position(self, long_period, short_period):

@@ -1,16 +1,48 @@
-from TradingStrategy import TradingStrategy
-from ApiClient import ApiClient
-from ExponentialMovingAverage import ExponentialMovingAverage
+import importlib
+import sys
+import os,sys
+sys.path.insert(1, os.path.join(os.getcwd()  , '..'))
 
-Api_Key ='PKCD2BLDAVHBPC7ZFJV1'
-Secret_Key='yMk526TDcjYyjGDQrxy2COdUKy0vgiW2efL6mftd'
+
+import importlib
+import numpy as np
+import pandas as pd
+import TradingStrategy as ts
+import ApiClient as ac
+import ExponentialMovingAverage as ema
+import SimpleMovingAverageStrategy as sma
+
+importlib.reload(ts)
+importlib.reload(ac)
+importlib.reload(ema)
+importlib.reload(sma)
+
+Api_Key =''
+Secret_Key=''
 endpoint='https://paper-api.alpaca.markets'
 
-ts = ApiClient(api_key_Id=Api_Key,api_key_secret=Secret_Key)
-df= ts. get_closing_price("AMZN",365)
+client = ac.ApiClient(api_key_Id=Api_Key,api_key_secret=Secret_Key)
 
-ema = ExponentialMovingAverage(df);
+for ticker in ["FB","MSFT","NFLX","AMD","GOOG"]:
+  df= client. get_closing_price(ticker,365)
 
-ema.create_trading_strategy(long_period=50,short_period=20,column='close')
+  ema_instance = ema.ExponentialMovingAverage(df=df,ticker=ticker) # you can replace this with SimpleMovingAverage
 
-print(df[df["positions"]==1].head(10))
+  #print(df.head(10))
+  df= ema_instance.create_trading_strategy(long_period=50,short_period=20,column='close') 
+
+   #calculate the profits
+  df = ema_instance.calculate_profit()
+
+  # The returns of the Buy and Hold strategy:
+  hold_strategy_profit = df["daily_profit"].sum() * 100
+
+  # The returns of the algorithm
+  ema_strategy_profit = df["strategy_profit"].sum() * 100
+  
+
+  print(f'Percentage return of Buy and Hand algorithm for {ticker} for 365 day period:  {hold_strategy_profit}%') 
+  print(f'Percentage return of {ema_instance.mvType} algorithm for {ticker} for 365 day period:  {ema_strategy_profit}%') 
+  
+  df.to_csv("data-processed-1.csv")
+  

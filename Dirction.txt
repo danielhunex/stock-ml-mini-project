@@ -1,5 +1,4 @@
-buy/sell points detect mechanism: using STL result to EMA
-change features: adding more than one day history to data, Broad index
-change model: Trying LSTM
+buy/sell points detect mechanism: using STL result to EMA,log
+change features: adding more than one day history to data, Broad index(spy)
 imporve stop falling mechanism
-CNN? Unsupervised learning
+improve profit mechanism

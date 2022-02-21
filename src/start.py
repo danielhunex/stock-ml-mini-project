@@ -1,12 +1,24 @@
+import pip
+
+def import_or_install(package):
+    try:
+        __import__(package)
+    except ImportError:
+        pip.main(['install', package])   
+
+import_or_install('importlib')
+import_or_install('sys')
+import_or_install('os')
+import_or_install('pandas')
+import_or_install('importlib')
+import_or_install("numpy")
+import_or_install("matplotlib")
+
 import importlib
 import sys
 import os,sys
 sys.path.insert(1, os.path.join(os.getcwd()  , '..'))
 
-
-import importlib
-import numpy as np
-import pandas as pd
 import TradingStrategy as ts
 import ApiClient as ac
 import ExponentialMovingAverageStrategy as ema
@@ -17,8 +29,8 @@ importlib.reload(ac)
 importlib.reload(ema)
 importlib.reload(sma)
 
-Api_Key =''
-Secret_Key=''
+Api_Key ='PKPWLUH9TXMBKRAZ27MH'
+Secret_Key='sUJp72yNbrkKICNGhtPRwFX0bViJsP4dw94YpaOn'
 endpoint='https://paper-api.alpaca.markets'
 
 client = ac.ApiClient(api_key_Id=Api_Key,api_key_secret=Secret_Key)

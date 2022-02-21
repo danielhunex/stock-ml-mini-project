@@ -1,5 +1,3 @@
-from cgitb import small
-from signal import signal
 import pandas as pd
 import numpy as np
 from BaseStrategy import BaseStrategy

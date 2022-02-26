@@ -23,7 +23,7 @@ class BaseStrategy:
         self.df.dropna(inplace=True)
 
         return self.df
-
+   
     # function to generate buy and sell signals
     def _generate_signal_position(self, long_period, short_period):
 

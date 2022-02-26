@@ -20,17 +20,17 @@ import os,sys
 sys.path.insert(1, os.path.join(os.getcwd()  , '..'))
 
 import TradingStrategy as ts
-import ApiClient as ac
-import ExponentialMovingAverageStrategy as ema
-import SimpleMovingAverageStrategy as sma
+import Common.ApiClient as ac
+import MA.ExponentialMovingAverageStrategy as ema
+import MA.SimpleMovingAverageStrategy as sma
 
 importlib.reload(ts)
 importlib.reload(ac)
 importlib.reload(ema)
 importlib.reload(sma)
 
-Api_Key ='PKPWLUH9TXMBKRAZ27MH'
-Secret_Key='sUJp72yNbrkKICNGhtPRwFX0bViJsP4dw94YpaOn'
+Api_Key =''
+Secret_Key=''
 endpoint='https://paper-api.alpaca.markets'
 
 client = ac.ApiClient(api_key_Id=Api_Key,api_key_secret=Secret_Key)

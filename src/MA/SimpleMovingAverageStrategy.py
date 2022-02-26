@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
-from BaseStrategy import BaseStrategy
-from MovingAverageCalculator import MovingAverageCalculator
+from MA.BaseStrategy import BaseStrategy
+from Common.MovingAverageCalculator import MovingAverageCalculator
 
 class SimpleMovingAverageStrategy(BaseStrategy):
     def __init__(self, df, ticker):

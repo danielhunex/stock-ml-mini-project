@@ -27,7 +27,7 @@ class DatetimeUtility:
 
         schedule = nyse.schedule(yesterday.date().strftime("%Y-%m-%d"), tomorrow.date().strftime("%Y-%m-%d"))
 
-        now = datetime.now(tz=tz.gettz('America/New_York')) + timedelta(hours=-7)
+        now = datetime.now(tz=tz.gettz('America/New_York'))
         is_open=False
         try: 
         is_open=nyse.open_at_time(schedule, pd.Timestamp(now.strftime("%Y-%m-%d %H:%M"), tz='America/New_York'))

@@ -9,7 +9,7 @@ BASE_DIR = "../data"
 
 class ApiClient:
     def __init__(self, api_key_Id, api_key_secret, api_url="https://paper-api.alpaca.markets"):
-        self.serviceClient = alpaca.REST(api_key_Id, api_key_secret, api_url)
+        self.api = alpaca.REST(api_key_Id, api_key_secret, api_url)
 
     def get_closing_price(self, stock_ticker, limit=90):
         # if data exists in file, load from file otherwise call from the api, to avoid hitting the api limit
@@ -17,7 +17,7 @@ class ApiClient:
         if exists(filepath):
             return self.read_csv(filepath=filepath)
         else:
-            barset = self.serviceClient.get_barset(
+            barset = self.api.get_barset(
                 stock_ticker, 'day', limit=limit)
             bars = barset[stock_ticker]
             df = bars.df
@@ -29,17 +29,19 @@ class ApiClient:
             return df
 
     def get_last_trade(self, STOCK):
-        return self.serviceClient.get_last_trade(STOCK)
+        return self.api.get_last_trade(STOCK)
 
     def get_account(self):
-        return self.serviceClient.get_account()
+        return self.api.get_account()
 
     def list_positions(self):
         return self.list_positions()
-
-    def submit_order(self, STOCK, qty, side, type, time_in_force, order_class):
-        return self.serviceClient.submit_order(STOCK,  qty=qty,  side=side,  type=type, time_in_force=time_in_force, order_class=order_class)
-
+   
+    def submit_order(self, STOCK, qty, side, type, time_in_force, order_class, limit_price=None):
+        if limit_price == None:
+          return self.api.submit_order(STOCK,  qty=qty,  side=side,  type=type, time_in_force=time_in_force, order_class=order_class)
+        else:
+          return  self.api.submit_order(STOCK,  qty=qty,  side=side,  type=type, time_in_force=time_in_force, order_class=order_class,limit_price=limit_price)
     def save_to_csv(self, df, filepath):
         filepath = Path(filepath)
         filepath.parent.mkdir(parents=True, exist_ok=True)

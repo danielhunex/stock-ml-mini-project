@@ -4,7 +4,7 @@ from os.path import exists
 import pandas as pd
 import os
 
-BASE_DIR = "data"
+BASE_DIR = "../data"
 
 
 class ApiClient:
@@ -22,7 +22,7 @@ class ApiClient:
             bars = barset[stock_ticker]
             df = bars.df
             # converting the time column to DatetimeIndex
-            time = pd.to_datetime(df.index, utc=True)
+            time = pd.to_datetime(df.index)
             df.set_index(time, inplace=True)
         # df.index.name = 'time'
             self.save_to_csv(df, filepath=filepath)

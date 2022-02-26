@@ -269,7 +269,10 @@ class STL_strategy():
         
 if __name__ == "__main__":
     total = 0
-    client = ac.ApiClient('PKQLM6IO3KNXCFQ17U0G','ZTzKsxn7uEaSvCGG8SVmqZR5PBGps9nR9WHLPkNF')
+    Api_Key =''
+    Secret_Key=''
+    endpoint='https://paper-api.alpaca.markets'
+    client = ac.ApiClient(Api_Key,Secret_Key,endpoint)
     for s,ticker in enumerate([ "MSFT","AAPL","AMD","GOOG","SPY"]):
         df= client.get_closing_price(ticker,255)
         df.index=pd.to_datetime(df.index,utc=True)

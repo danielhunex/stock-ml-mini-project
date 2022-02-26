@@ -1,0 +1,4 @@
+buy/sell points detect mechanism: using STL result to EMA,log
+change features: adding more than one day history to data, Broad index(spy)
+imporve stop falling mechanism
+improve profit mechanism

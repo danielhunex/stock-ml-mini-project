@@ -16,6 +16,7 @@ class ExponentialMovingAverageStrategy(BaseStrategy):
         self.TICKER = ticker
         self.movingAverage = MovingAverageCalculator(df)
 
+    #None-ML trading strategy based on crossing moving averages
     def create_trading_strategy(self, long_period=50, short_period=20, column='close'):
         # generate the short exponetial moving average
         self.movingAverage.EMA(period=short_period, column=column)
@@ -28,6 +29,7 @@ class ExponentialMovingAverageStrategy(BaseStrategy):
                    long_period=long_period)
         return self.df
 
+    # create labels based on exponential moving average peaks and valleys
     def create_feature_label(self, period=20, column='close', order=4):
 
         # create the short period exponetial moving average

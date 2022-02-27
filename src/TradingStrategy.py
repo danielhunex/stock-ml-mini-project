@@ -160,8 +160,8 @@ class TradingStrategy:
             order_class=None, limit_price=self.SELL_LIMIT_PRICE)  # make this factor to the actual bought price
 
     def does_strategy_suggest_buy(self):
-        self.update_strategy_model()
-        return self.trained_label[len(self.trained_label)-1] == 1;
+          self.update_strategy_model()
+          return self.trained_label[len(self.trained_label)-1] == 1;
     
     def does_strategy_suggest_sell(self):
         self.update_strategy_model()
@@ -198,8 +198,8 @@ class TradingStrategy:
 
         if self.have_bought_stock():           
             # Initiate Sell order
-            if self.does_strategy_suggest_sell():
-               buy_price = self.get_buy_price()
+            if self.does_strategy_suggest_sell():  
+               buy_price = self.get_buy_price() 
                self.SELL_LIMIT_PRICE = int(
                float(buy_price))*self.SELL_LIMIT_FACTOR
                self.sell_limit_order()

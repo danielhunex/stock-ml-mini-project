@@ -6,10 +6,13 @@ from datetime import datetime
 from dateutil import tz
 from STL.StlMl import STL_strategy
 import time
+import schedule
+import time
 
 class PaperTrader:
     def __init__(self,model='ema', STOCKs=["FB","MSFT","NFLX","AMD","GOOG"]):
         money = 100000
+        self.STOCKs= STOCKs
         self.model = model
         self.stratgies={}
         self.STOCKs_money = {}
@@ -24,12 +27,17 @@ class PaperTrader:
         
 
     def run_trading(self):
+        schedule.every().day.at("12:30").do(trade,'It is 12:30')
         while True:
             now = datetime.now(tz=tz.gettz('America/New_York'))
             while not self.DatetimeUtility.is_market_open_now(now):
-                 time.sleep(30)
-            for stock,tradingStrategy in self.Strategies.items():
-                tradingStrategy.market_buy_strategy()
+                 time.sleep(60) # check if the market is open or not every 1 mins                 
+            schedule.run_pending()
+            time.sleep(60)
+
+    def trade(self):
+        for stock,tradingStrategy in self.Strategies.items():
+            tradingStrategy.market_buy_strategy()
                 
                 
 # Choice a model and predict sign for each stock               

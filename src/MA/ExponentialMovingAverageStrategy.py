@@ -47,18 +47,8 @@ class ExponentialMovingAverageStrategy(BaseStrategy):
 
         self.df.fillna(0, inplace=True)
 
-        # sanitize, no sell before buy       
-
-        prevSignal = 0
-        for i in range(0, self.df.shape[0]):
-            if prevSignal == -1:     
-                self.df["signal"][i-1] = 0   # no sell before buy for the first time in trading
-                prevSignal = self.df["signal"][i-1]
-            elif prevSignal == 1:
-                break
-            else:
-                prevSignal = self.df["signal"][i]
-    
+        # sanitize, no sell before buy   
+        self.df = self.__sanitize(self.df)    
 
         label = self.df["signal"]
         self.df.drop(["signal"], inplace=True, axis=1)
@@ -134,7 +124,7 @@ class ExponentialMovingAverageStrategy(BaseStrategy):
     def generate_train_model(self, ticker):
         feature_transform, label, scalar_transformer=self.create_feature_label(20,'close',3)
         X_train ,y_train, X_test,y_test= self.split_train_test_data(feature_transform, label)
-
+       
         predictor = self.fit(X_train, y_train)
         y_pred = predictor.predict(X_test)
         
@@ -143,7 +133,46 @@ class ExponentialMovingAverageStrategy(BaseStrategy):
 
         train["signal"] = y_train
         test["signal"] = y_pred
+        test = self.__calc_profit(self.__sanitize(test))
         self.plot_buy_sell_point(train,"ema_20",20,test,ticker)
         return test, y_pred
 
+    #remove sell before buy, or no successive buy signal,
+    def __sanitize (self,df):
+        prevSignal = 0
+        for i in range(0, df.shape[0]):
+            if prevSignal == -1:     
+                df["signal"][i-1] = 0   # no sell before buy for the first time in trading
+                prevSignal = df["signal"][i-1]
+            elif prevSignal == 1:
+                break
+            else:
+                prevSignal = df["signal"][i]
+        #add positions
+        bought = False
+        df["positions"] =0
+        for i in range(0, df.shape[0]):
+            if df["signal"][i] == 1:
+                bought =True
+                df["positions"][i]=1
+            elif df["signal"][i] ==-1:
+                bought = False
+                df["positions"][i]=0
+            elif bought:
+                df["positions"][i]=1
+                
+        df.dropna(inplace=True)
+        return df
+
+    def __calc_profit(self,df):
+        # daily profit
+        df["daily_profit"] = np.log(
+        df['close'] / df['close'].shift(1)).round(3)    # daily profit (log return ln(Pt+1/Pt))
+
+            # calculate strategy profit
+            # each positions =1 is our strategy buy or hold if we bought previously
+        df['strategy_profit'] = (df['positions'].shift(1) * df['daily_profit']).round(3)  # profity for the strategy depends on positions and daily profit
+            # We need to get rid of the NaN generated in the first row:
+        df.dropna(inplace=True)
+        return df
 

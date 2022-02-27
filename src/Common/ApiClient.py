@@ -35,7 +35,7 @@ class ApiClient:
         return self.api.get_account()
 
     def list_positions(self):
-        return self.list_positions()
+        return self.api.list_positions()
    
     def submit_order(self, STOCK, qty, side, type, time_in_force, order_class, limit_price=None):
         if limit_price == None:

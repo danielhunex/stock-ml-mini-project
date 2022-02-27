@@ -8,13 +8,13 @@ from STL.StlMl import STL_strategy
 import time
 
 class PaperTrader:
-    def __init__(self, STOCKs=["FB","MSFT","NFLX","AMD","GOOG"]):
+    def __init__(self,model='ema', STOCKs=["FB","MSFT","NFLX","AMD","GOOG"]):
         money = 100000
+        self.model = model
         self.stratgies={}
         self.STOCKs_money = {}
-        self.STOCKs = STOCKs
         for stock in self.STOCKs:
-            self.stratgies[stock]=tStrategy.TradingStrategy(stock)
+            self.stratgies[stock]=tStrategy.TradingStrategy(stock,self.model)
             self.STOCKs_money[stock]= float(money/5)
         self.DatetimeUtility = du.DatetimeUtility()
         
@@ -33,8 +33,8 @@ class PaperTrader:
                 
                 
 # Choice a model and predict sign for each stock               
-    def model2trade(self, name='stl'):
-        if name.lower() == 'stl':        
+    def model2trade(self,):
+        if self.model.lower() == 'stl':        
             for stock,tradingStrategy in self.Strategies.items():
                 df = tradingStrategy.get_past255_closing_prices()
                 df.index=pd.to_datetime(df.index,utc=True)

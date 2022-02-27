@@ -200,11 +200,11 @@ class STL_strategy():
       
     # Wrap anything to post today's trading strategy
     def strategy(self):
-        split=int(df.shape[0]*7/12)
+        split=int(self.df.shape[0]*7/12)
         train_ = self.df.iloc[:split]
         test_ = self.df.iloc[split-5:]      
-        x0,y0 = stl.transfor(train_)
-        x1,y1 = stl.transfor(test_)
+        x0,y0 = self.transfor(train_)
+        x1,y1 = self.transfor(test_)
         self.fit(x0,y0)
         preid = self.predict(x1)            
         return preid[-1]         

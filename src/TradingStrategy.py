@@ -3,7 +3,6 @@ from logging.config import valid_ident
 import time
 import Common.ApiClient as ac
 import Common.DatetimeUtility as utility
-import alpaca_trade_api as alpaca
 import MA.ExponentialMovingAverageStrategy as ema
 from datetime import datetime
 from dateutil import tz
@@ -18,22 +17,24 @@ SECRET_KEY = ""
 
 
 class TradingStrategy:
-    def __init__(self, STOCK):
+    def __init__(self, STOCK,model='ema'):
         self.Datetime_Utility = utility.DatetimeUtility()
         self.STOCK = STOCK
         self.SELL_LIMIT_FACTOR = 1.01  # 1 percent margin
-
         self.client = ac.ApiClient(
             api_key_Id=API_KEY_ID, api_key_secret=SECRET_KEY)
 
         # Get past one year closing data
         self.df = self.get_past255_closing_prices()
-        self.ema_instance = ema.ExponentialMovingAverageStrategy(df=self.df.copy(
-            deep=True), ticker=STOCK)  # you can replace this with SimpleMovingAverage
-        trained_model, predicted = self.ema_instance.generate_train_model(
-            ticker=STOCK, plot=False)
-        self.trained_model = trained_model
-        self.trained_label = predicted
+        if model.lower() == 'stl':
+            pass
+        else:
+            self.ema_instance = ema.ExponentialMovingAverageStrategy(df=self.df.copy(
+                deep=True), ticker=STOCK)  # you can replace this with SimpleMovingAverage
+            trained_model, predicted = self.ema_instance.generate_train_model(
+                ticker=STOCK, plot=False)
+            self.trained_model = trained_model
+            self.trained_label = predicted
 
     def update_strategy_model(self):
 
@@ -108,6 +109,7 @@ class TradingStrategy:
     def get_positions_quantity(self):
         self.EXISTING_QUANTITY = 0
         positions = self.client.list_positions()
+        
         for position in positions:
             if position.symbol == self.STOCK:
                 # add the quantities for  stock
@@ -117,6 +119,7 @@ class TradingStrategy:
     def get_buy_price(self):
         # Identify the buying price for a stock
         positions = self.client.list_positions()
+        
         for position in positions:
             if position.symbol == self.STOCK:
                 return float(position.cost_basis)/int(position.qty)
@@ -144,7 +147,9 @@ class TradingStrategy:
                                      order_class=None,
                                      limit_price=base_price)
 
-    def sell_limit_order(self):
+    def sell_limit_order(self,price=None):
+        if price == None:
+            price = self.SELL_LIMIT_PRICE
         # (This is for paper-trading)
         # only sell if we have positions, and the model says sell
         # label -1 is sell, 1 is buy, we check the last label( todays label)

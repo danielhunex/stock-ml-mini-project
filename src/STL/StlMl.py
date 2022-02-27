@@ -200,11 +200,11 @@ class STL_strategy():
       
     # Wrap anything to post today's trading strategy
     def strategy(self):
-        split=int(df.shape[0]*7/12)
+        split=int(self.df.shape[0]*7/12)
         train_ = self.df.iloc[:split]
         test_ = self.df.iloc[split-5:]      
-        x0,y0 = stl.transfor(train_)
-        x1,y1 = stl.transfor(test_)
+        x0,y0 = self.transfor(train_)
+        x1,y1 = self.transfor(test_)
         self.fit(x0,y0)
         preid = self.predict(x1)            
         return preid[-1]         
@@ -269,7 +269,10 @@ class STL_strategy():
         
 if __name__ == "__main__":
     total = 0
-    client = ac.ApiClient('PKQLM6IO3KNXCFQ17U0G','ZTzKsxn7uEaSvCGG8SVmqZR5PBGps9nR9WHLPkNF')
+    Api_Key =''
+    Secret_Key=''
+    endpoint='https://paper-api.alpaca.markets'
+    client = ac.ApiClient(Api_Key,Secret_Key,endpoint)
     for s,ticker in enumerate([ "MSFT","AAPL","AMD","GOOG","SPY"]):
         df= client.get_closing_price(ticker,255)
         df.index=pd.to_datetime(df.index,utc=True)

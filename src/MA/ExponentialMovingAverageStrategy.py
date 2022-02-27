@@ -105,15 +105,15 @@ class ExponentialMovingAverageStrategy(BaseStrategy):
 
         # plot the test
         
-        df_test['close'].plot(color='b', label='Test Close Price')
-        df_test[mva_column].plot(color='c', label=f'Test EMA {period} Price')
+        df_test['close'].plot(color='b', label='Backtest Close Price')
+        df_test[mva_column].plot(color='c', label=f'Backtest EMA {period} Price')
 
         plt.plot(df_test[df_test['signal'] == -1].index, df_test["close"]
-                 [df_test["signal"] == -1], 'v', markersize=15, color='#FF7333', label="Sell -Predicted")
+                 [df_test["signal"] == -1], 'v', markersize=15, color='#cc6600', label="Sell - backtest")
 
         # plot buy
         plt.plot(df_test[df_test['signal'] == 1].index, df_test["close"]
-                 [df_test['signal'] == 1],  '^', markersize=15, color='#22D16D', label="Buy - predicted")
+                 [df_test['signal'] == 1],  '^', markersize=15, color='#99cc00', label="Buy - backtest")
 
 
         plt.title(ticker, fontsize=20)
@@ -121,7 +121,7 @@ class ExponentialMovingAverageStrategy(BaseStrategy):
         plt.grid()
         plt.show()
 
-    def generate_train_model(self, ticker):
+    def generate_train_model(self, ticker,plot=True):
         feature_transform, label, scalar_transformer=self.create_feature_label(20,'close',3)
         X_train ,y_train, X_test,y_test= self.split_train_test_data(feature_transform, label)
        
@@ -134,7 +134,8 @@ class ExponentialMovingAverageStrategy(BaseStrategy):
         train["signal"] = y_train
         test["signal"] = y_pred
         test = self.__calc_profit(self.__sanitize(test))
-        self.plot_buy_sell_point(train,"ema_20",20,test,ticker)
+        if plot:
+           self.plot_buy_sell_point(train,"ema_20",20,test,ticker)
         return test, y_pred
 
     #remove sell before buy, or no successive buy signal,
@@ -166,8 +167,7 @@ class ExponentialMovingAverageStrategy(BaseStrategy):
 
     def __calc_profit(self,df):
         # daily profit
-        df["daily_profit"] = np.log(
-        df['close'] / df['close'].shift(1)).round(3)    # daily profit (log return ln(Pt+1/Pt))
+        df["daily_profit"] = (np.log(df['close'] / df['close'].shift(1))).round(3)    # daily profit (log return ln(Pt+1/Pt))
 
             # calculate strategy profit
             # each positions =1 is our strategy buy or hold if we bought previously

@@ -31,7 +31,7 @@ class TradingStrategy:
         self.ema_instance = ema.ExponentialMovingAverageStrategy(df=self.df.copy(
             deep=True), ticker=STOCK)  # you can replace this with SimpleMovingAverage
         trained_model, predicted = self.ema_instance.generate_train_model(
-            ticker=STOCK)
+            ticker=STOCK, plot=False)
         self.trained_model = trained_model
         self.trained_label = predicted
 
@@ -68,7 +68,7 @@ class TradingStrategy:
             self.ema_instance = ema.ExponentialMovingAverageStrategy(
                 df=df, ticker=self.STOCK)
             trained_model, predicted = self.ema_instance.generate_train_model(
-                self.STOCK)
+                self.STOCK, plot=False)
             self.trained_model = trained_model
             self.trained_label = predicted
             return df

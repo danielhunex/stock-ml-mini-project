@@ -10,11 +10,6 @@ import pandas as pd
 
 
 ENDPOINT = "https://paper-api.alpaca.markets"
-# Put in yours here - Needed for paper trading
-API_KEY_ID = ""
-# Put in yours here - Needed for paper trading
-SECRET_KEY = ""
-
 
 class TradingStrategy:
     def __init__(self, STOCK,API_KEY_ID,SECRET_KEY,model='ema'):

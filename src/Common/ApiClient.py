@@ -25,7 +25,7 @@ class ApiClient:
             time = pd.to_datetime(df.index)
             df.set_index(time, inplace=True)
         # df.index.name = 'time'
-            self.save_to_csv(df, filepath=filepath)
+            #self.save_to_csv(df, filepath=filepath)
             return df
 
     def get_last_trade(self, STOCK):

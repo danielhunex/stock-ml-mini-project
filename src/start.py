@@ -50,7 +50,7 @@ for ticker in ["FB","MSFT","AMZN","AMD","GOOG"]:
     print(f'Buy and hold strategy returns for the backtest: {(test["daily_profit"].sum()*100).round(3)}')
     print(f'EMA based model strategy returns for the backtest: {(test["strategy_profit"].sum()*100).round(3)}')
 
-total = 0
+total = 0.0
 from STL.StlMl import STL_strategy
 for s,ticker in enumerate([ "MSFT","AAPL","GM","GOOG","TSLA"]):
     df= client.get_closing_price(ticker,255)

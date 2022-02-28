@@ -9,20 +9,15 @@ import schedule
 import time
 
 class PaperTrader:
-    def __init__(self,model='ema', STOCKs=["FB","MSFT","NFLX","AMD","GOOG"]):
-        money = 100000
-        self.STOCKs= STOCKs
+    def __init__(self,API_KEY_ID,SECRET_KEY,model='ema', STOCKs=["FB","MSFT","NFLX","AMD","GOOG"]):
         self.model = model
-        self.stratgies={}
+        self.Strategies={}
         self.STOCKs_money = {}
-        for stock in self.STOCKs:
-            self.stratgies[stock]=tStrategy.TradingStrategy(stock,self.model)
-            self.STOCKs_money[stock]= float(money/5)
-        self.DatetimeUtility = du.DatetimeUtility()
+        for stock in STOCKs:
+            self.Strategies[stock]=tStrategy.TradingStrategy(stock,API_KEY_ID,SECRET_KEY,self.model)
+        self.DatetimeUtility = du.DatetimeUtility()      
         
-        self.buy_price_stockes={}     
-               
-
+        
     def run_trading(self):
         schedule.every().day.at("12:30").do(self.trade,'It is 12:30')
         while True:

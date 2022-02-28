@@ -17,7 +17,8 @@ SECRET_KEY = ""
 
 
 class TradingStrategy:
-    def __init__(self, STOCK,model='ema'):
+    def __init__(self, STOCK,API_KEY_ID,SECRET_KEY,model='ema'):
+        self.model = model
         self.Datetime_Utility = utility.DatetimeUtility()
         self.STOCK = STOCK
         self.SELL_LIMIT_FACTOR = 1.01  # 1 percent margin
@@ -26,8 +27,9 @@ class TradingStrategy:
 
         # Get past one year closing data
         self.df = self.get_past255_closing_prices()
-        if model.lower() == 'stl':
+        if self.model.lower() == 'stl':
             pass
+                
         else:
             self.ema_instance = ema.ExponentialMovingAverageStrategy(df=self.df.copy(
                 deep=True), ticker=STOCK)  # you can replace this with SimpleMovingAverage

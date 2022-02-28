@@ -45,7 +45,7 @@ class STL_strategy():
         self.df = df
         self.df.index=pd.to_datetime(df.index,utc=True)
         
-    # generate features and labels beased on stl
+    # generate features and labels based on stl
     # return histories of the day =>features
     #        the day's trading possible
     def transfor (self,x):
@@ -100,7 +100,7 @@ class STL_strategy():
         z[mix_index] = 1    
         transfor_y =  np.array(z,dtype='int') 
         ''' 
-        # 2) Dividing  to three parts baseed on total mean of residual, sell/hold/buy
+        # 2) Dividing  to three parts based on total mean of residual, sell/hold/buy
         #     Then sanitize, no sell before buy and only one buy before sell
         #'''   
         # create raw labels   
@@ -114,13 +114,13 @@ class STL_strategy():
             elif resid_checking[i]<middle-0.1:
                 preid.append(1)
             else:
-                preid.append(0)       
+                preid.append(0)  
+        '''     
         hold = 0
         pre_buy = 1
         predict=[]             
         price_check = self.df.iloc[-len(preid):]
-        #print(price_check.shape,len(preid))
-        
+        #print(price_check.shape,len(preid))        
         # sanitize labels
         for index,i in enumerate(preid):
             #Sell
@@ -135,9 +135,9 @@ class STL_strategy():
             #Hold
             else:
                 predict.append(0)
-        transfor_y =  np.array(preid,dtype='int')        
-        #'''
+        '''
         
+        transfor_y =  np.array(preid,dtype='int')  
         #self._plot(self.df,transfor_y)
         #print('result',transfor_x.iloc[:-1].shape,transfor_y[1:].shape) 
         return transfor_x.iloc[:-1],np.array(transfor_y[1:])
@@ -183,8 +183,9 @@ class STL_strategy():
         self.fit(x0,y0)
         preid = self.predict(x1)
         predict = self.regulate(self.df,preid) 
-        profit_results = self.publish_trading_strategy(self.df,predict)          
-        print("Profit based on STL ML at last 5 months: %.2f" %(profit_results))
+        #print(predict)
+        profit_results = self.publish_trading_strategy(self.df,predict)         
+        print('Profit based on STL ML at last 5 months: {:.2f}%'.format(profit_results*100))
         self._plot(self.df,predict)
         return profit_results
         
@@ -206,7 +207,8 @@ class STL_strategy():
         x0,y0 = self.transfor(train_)
         x1,y1 = self.transfor(test_)
         self.fit(x0,y0)
-        preid = self.predict(x1)            
+        preid = self.predict(x1) 
+        #print(preid)           
         return preid[-1]         
     
     # sanitize extra buy and sell and prevention of excessive losses
@@ -267,16 +269,3 @@ class STL_strategy():
         plt.show() 
         
         
-if __name__ == "__main__":
-    total = 0
-    Api_Key =''
-    Secret_Key=''
-    endpoint='https://paper-api.alpaca.markets'
-    client = ac.ApiClient(Api_Key,Secret_Key,endpoint)
-    for s,ticker in enumerate([ "MSFT","AAPL","AMD","GOOG","SPY"]):
-        df= client.get_closing_price(ticker,255)
-        df.index=pd.to_datetime(df.index,utc=True)
-        split=int(df.shape[0]*7/12)
-        stl = STL_strategy(ticker,df,'close',10,3)  
-        total += stl.backtest()
-    print('totl profit:',total)

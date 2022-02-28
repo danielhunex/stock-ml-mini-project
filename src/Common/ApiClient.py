@@ -19,7 +19,7 @@ class ApiClient:
             df = bars.df
             # converting the time column to DatetimeIndex
             time = pd.to_datetime(df.index)
-            df.set_index(time, inplace=True)
+            df.set_index(time, inplace=True)     
             return df
         
     def get_last_trade(self, STOCK):

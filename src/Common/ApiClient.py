@@ -12,11 +12,7 @@ class ApiClient:
         self.api = alpaca.REST(api_key_Id, api_key_secret, api_url)
 
     def get_closing_price(self, stock_ticker, limit=90):
-        # if data exists in file, load from file otherwise call from the api, to avoid hitting the api limit
-        filepath = self.get_path(stock_ticker=stock_ticker)
-        if exists(filepath):
-            return self.read_csv(filepath=filepath)
-        else:
+        # if data exists in file, load from file otherwise call from the api, to avoid hitting the api limit       
             barset = self.api.get_barset(
                 stock_ticker, 'day', limit=limit)
             bars = barset[stock_ticker]
@@ -24,10 +20,8 @@ class ApiClient:
             # converting the time column to DatetimeIndex
             time = pd.to_datetime(df.index)
             df.set_index(time, inplace=True)
-        # df.index.name = 'time'
-            self.save_to_csv(df, filepath=filepath)
             return df
-
+        
     def get_last_trade(self, STOCK):
         return self.api.get_last_trade(STOCK)
 

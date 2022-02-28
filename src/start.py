@@ -57,6 +57,6 @@ for s,ticker in enumerate([ "MSFT","AAPL","GM","GOOG","TSLA"]):
     df.index=pd.to_datetime(df.index,utc=True)
     stl = STL_strategy(ticker,df,'close',10,3)  
     total += stl.backtest()
-print('totl profit:{:.2f}%'.format(total))  
+print('total profit:{:.2f}%'.format(total))  
 
 

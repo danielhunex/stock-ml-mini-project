@@ -4,7 +4,6 @@ import TradingStrategy as tStrategy
 import Common.DatetimeUtility as du
 from datetime import datetime
 from dateutil import tz
-from STL.StlMl import STL_strategy
 import time
 import schedule
 import time
@@ -21,13 +20,11 @@ class PaperTrader:
             self.STOCKs_money[stock]= float(money/5)
         self.DatetimeUtility = du.DatetimeUtility()
         
-        self.buy_price_stockes={}
-        
-        
-        
+        self.buy_price_stockes={}     
+               
 
     def run_trading(self):
-        schedule.every().day.at("12:30").do(trade,'It is 12:30')
+        schedule.every().day.at("12:30").do(self.trade,'It is 12:30')
         while True:
             now = datetime.now(tz=tz.gettz('America/New_York'))
             while not self.DatetimeUtility.is_market_open_now(now):

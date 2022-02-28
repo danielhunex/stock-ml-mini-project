@@ -27,6 +27,8 @@ class ApiClient:
 
     def get_account(self):
         return self.api.get_account()
+    def list_orders(self):
+        return self.api.list_orders()
 
     def list_positions(self):
         return self.api.list_positions()

@@ -183,6 +183,7 @@ class STL_strategy():
         self.fit(x0,y0)
         preid = self.predict(x1)
         predict = self.regulate(self.df,preid) 
+        #print(predict)
         profit_results = self.publish_trading_strategy(self.df,predict)         
         print('Profit based on STL ML at last 5 months: {:.2f}%'.format(profit_results*100))
         self._plot(self.df,predict)
@@ -206,7 +207,8 @@ class STL_strategy():
         x0,y0 = self.transfor(train_)
         x1,y1 = self.transfor(test_)
         self.fit(x0,y0)
-        preid = self.predict(x1)            
+        preid = self.predict(x1) 
+        #print(preid)           
         return preid[-1]         
     
     # sanitize extra buy and sell and prevention of excessive losses

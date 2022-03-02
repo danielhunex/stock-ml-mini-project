@@ -20,13 +20,14 @@ class PaperTrader:
         self.DatetimeUtility = du.DatetimeUtility()
 
     def run_trading(self):
-        schedule.every().day.at("12:30").do(self.trade, 'It is 12:30')
+        schedule.every().day.at("12:30").do(self.trade)
         while True:
             now = datetime.now(tz=tz.gettz('America/New_York'))
-            while not self.DatetimeUtility.is_market_open_now(now):
+            #while not self.DatetimeUtility.is_market_open_now(now):
                 # check if the market is open or not every 1 mins
-                time.sleep(60)
+                #time.sleep(60)
             schedule.run_pending()
+            print("Finished running trading for the day...")
             time.sleep(60)
 
     def trade(self):

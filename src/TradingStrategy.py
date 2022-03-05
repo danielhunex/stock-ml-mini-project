@@ -185,14 +185,6 @@ class TradingStrategy:
            if self.does_strategy_suggest_buy():  # we only buy if the strategy says suggests buy
                self.buy_market_order()
 
-        # BRACKET SELL order
-        # Initiate sell order if stock has been bought
-        # If not, wait for it to be bought
-        while not self.have_bought_stock():
-            # print(self.api.positions)
-            #print(self.NEW_QUANTITY + self.EXISTING_QUANTITY)
-            time.sleep(1)
-
         if self.have_bought_stock():           
             # Initiate Sell order
             if self.does_strategy_suggest_sell():  

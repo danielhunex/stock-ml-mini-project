@@ -10,7 +10,7 @@ import time
 
 
 class PaperTrader:
-    def __init__(self, API_KEY_ID, SECRET_KEY, model='ema', STOCKs=["FB", "MSFT", "NFLX", "AMD", "GOOG"]):
+    def __init__(self, API_KEY_ID, SECRET_KEY, model='ema', STOCKs=[ "MSFT", "GOOG", "NFLX", "AMD","FB"]):
         self.model = model
         self.Strategies = {}
         self.STOCKs_money = {}
@@ -20,19 +20,16 @@ class PaperTrader:
         self.DatetimeUtility = du.DatetimeUtility()
 
     def run_trading(self):
-        schedule.every().day.at("12:30").do(self.trade)
+        schedule.every().day.at("13:00").do(self.trade)
         while True:
-            now = datetime.now(tz=tz.gettz('America/New_York'))
-            #while not self.DatetimeUtility.is_market_open_now(now):
-                # check if the market is open or not every 1 mins
-                #time.sleep(60)
-            schedule.run_pending()
-            print("Finished running trading for the day...")
-            time.sleep(60)
-
+            schedule.run_pending()       
+          
     def trade(self):
-        for stock, tradingStrategy in self.Strategies.items():
+        items = self.Strategies.items()
+        for stock, tradingStrategy in items:
+            print(f"Starting trading {stock}")
             tradingStrategy.market_buy_strategy()
+            print(f"Finishing trading {stock}")
 
 
 # Choice a model and predict sign for each stock

@@ -115,7 +115,7 @@ class STL_strategy():
                 preid.append(1)
             else:
                 preid.append(0)  
-        '''     
+        #'''     
         hold = 0
         pre_buy = 1
         predict=[]             
@@ -124,7 +124,7 @@ class STL_strategy():
         # sanitize labels
         for index,i in enumerate(preid):
             #Sell
-            if (i ==-1 or np.log(price_check.close[index]/pre_buy)<-0.02 or np.log(price_check.close[index]/pre_buy)>0.02 )  and hold ==1 :
+            if (i ==-1 or np.log(price_check.close[index]/pre_buy)<-0.06 or np.log(price_check.close[index]/pre_buy)>0.15 )  and hold ==1 :
                 predict.append(-1)
                 hold = 0
             #Buy
@@ -135,12 +135,12 @@ class STL_strategy():
             #Hold
             else:
                 predict.append(0)
-        '''
+        #'''
         
         transfor_y =  np.array(preid,dtype='int')  
         #self._plot(self.df,transfor_y)
         #print('result',transfor_x.iloc[:-1].shape,transfor_y[1:].shape) 
-        return transfor_x.iloc[:-1],np.array(transfor_y[1:])
+        return transfor_x,np.array(transfor_y)
 
     # Test which ML will be the best
     def model_selection(self,x0,y0,x1,y1):
@@ -176,10 +176,18 @@ class STL_strategy():
     # Wrap anything to post backtest profit
     def backtest(self):
         split=int(self.df.shape[0]*7/12)
+        '''
+        temp_x,temp_y = self.transfor(self.df)
+        x0 = temp_x[:split]
+        x1 = temp_x[split-5:]
+        y0 = temp_y[:split]
+        y1 = temp_y[split-5:]
+        '''
         train_ = self.df.iloc[:split]
         test_ = self.df.iloc[split-5:]      
         x0,y0 = self.transfor(train_)
         x1,y1 = self.transfor(test_)
+        
         self.fit(x0,y0)
         preid = self.predict(x1)
         predict = self.regulate(self.df,preid) 
@@ -220,7 +228,7 @@ class STL_strategy():
         
         for index,i in enumerate(predict[:-1]):
             #Sell 
-            if (i ==-1 or np.log(close_price.close[index]/pre_buy)<-0.02 )  and hold ==1 :
+            if (i ==-1 or np.log(close_price.close[index]/pre_buy)<-0.06 )  and hold ==1 :
                 predict_new.append(-1)
                 hold = 0
             #Buy
